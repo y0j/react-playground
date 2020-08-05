@@ -1,4 +1,4 @@
-import React, {Component, createElement} from 'react';
+import React, {Component} from 'react';
 import './App.css';
 import Person from './Person/Person';
 import Validation from './Validation/Validation';
@@ -19,7 +19,7 @@ class App extends Component {
 
   nameChangedHandler = (event, id) => {
     const personIndex = this.state.persons.findIndex(p => {
-      return p.id == id
+      return p.id === id
     });
 
     const person = {
@@ -55,6 +55,13 @@ class App extends Component {
     });
   }
 
+  deleteCharHandler = (index) => {
+    const text = this.state.textInput.split('');
+    text.splice(index, 1)
+    const updatedText = text.join('');
+    this.setState({textInput: updatedText})
+  }
+
   render () {
     const style = {
       backgroundcolor: 'white',
@@ -80,28 +87,13 @@ class App extends Component {
       );
     }
 
-    let validation = null;
-    if (this.state.textInputLength > 5) {
-      validation = (
-        <div>
-          <Validation message="Text long enough"/>
-        </div>
-      );
-    }
-    else if (this.state.textInputLength > 0) {
-      validation = (
-        <div>
-          <Validation message="Text too short"/>
-        </div>
-      );
-    }
+    const charList = this.state.textInput.split('').map((ch, index) => {
+      return <Char 
+        character={ch} 
+        key={index}
+        clicked={() => this.deleteCharHandler(index)}/>;
+    });
 
-    let charComponent = null;
-    if (this.state.textInput) {
-      charComponent = (
-        <Char textInput={this.state.textInput}/>
-      );
-    }
 
     return (
       <div className="App">
@@ -115,8 +107,8 @@ class App extends Component {
         <br/>
         <input type="text" onChange={(event) => this.getLengthHandler(event)} value={this.state.textInput}/>
         <p>Length of the entered text: {this.state.textInputLength}</p>
-        {validation}
-        {charComponent}
+        <Validation textInputLength={this.state.textInputLength} />
+        {charList}
       </div>
     );
     //return React.createElement('div', {className: 'App'}, React.createElement('h1', null, 'Does this work now?'));
