@@ -1,6 +1,8 @@
 import React, {Component, createElement} from 'react';
 import './App.css';
 import Person from './Person/Person';
+import Validation from './Validation/Validation';
+import Char from './Char/Char';
 
 class App extends Component {
   state = {
@@ -10,7 +12,9 @@ class App extends Component {
       { id: 'he63sq', name: 'Mark', age: 26}
     ],
     otherState: 'some other value',
-    showPersons: false
+    showPersons: false,
+    textInput: '',
+    textInputLength: 0
   }
 
   nameChangedHandler = (event, id) => {
@@ -42,6 +46,15 @@ class App extends Component {
     this.setState({showPersons: !doesShow})
   }
 
+  getLengthHandler = (event) => {
+    const textInput = event.target.value;
+    const textInputLength = textInput.length;
+    this.setState({
+      textInput: textInput,
+      textInputLength: textInputLength
+    });
+  }
+
   render () {
     const style = {
       backgroundcolor: 'white',
@@ -67,6 +80,29 @@ class App extends Component {
       );
     }
 
+    let validation = null;
+    if (this.state.textInputLength > 5) {
+      validation = (
+        <div>
+          <Validation message="Text long enough"/>
+        </div>
+      );
+    }
+    else if (this.state.textInputLength > 0) {
+      validation = (
+        <div>
+          <Validation message="Text too short"/>
+        </div>
+      );
+    }
+
+    let charComponent = null;
+    if (this.state.textInput) {
+      charComponent = (
+        <Char textInput={this.state.textInput}/>
+      );
+    }
+
     return (
       <div className="App">
         <h1>Hi am a React app1</h1>
@@ -75,6 +111,12 @@ class App extends Component {
         style={style}
         onClick={this.togglePersonsHandler}>Toggle Persons</button>
         {persons}
+        <br/>
+        <br/>
+        <input type="text" onChange={(event) => this.getLengthHandler(event)} value={this.state.textInput}/>
+        <p>Length of the entered text: {this.state.textInputLength}</p>
+        {validation}
+        {charComponent}
       </div>
     );
     //return React.createElement('div', {className: 'App'}, React.createElement('h1', null, 'Does this work now?'));
@@ -84,6 +126,7 @@ class App extends Component {
 export default App;
 
 
+//        <input type="text" onChange={(event) => this.nameChangedHandler(event, )}/>
 
 
 
