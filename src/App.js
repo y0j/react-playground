@@ -3,6 +3,7 @@ import './App.css';
 import Person from './Person/Person';
 import Validation from './Validation/Validation';
 import Char from './Char/Char';
+import Radium, {StyleRoot} from 'radium';
 
 class App extends Component {
   state = {
@@ -64,11 +65,16 @@ class App extends Component {
 
   render () {
     const style = {
-      backgroundcolor: 'white',
+      backgroundColor: 'green',
+      color: 'white',
       font: 'inherit',
       border: '1px solid blue',
       padding: '8px',
-      cursor: 'pointer'
+      cursor: 'pointer',
+      ':hover': {
+        backgroundColor: 'lightgreen',
+        color: 'black'
+      }
     };
 
     let persons = null;
@@ -85,8 +91,22 @@ class App extends Component {
           })}
         </div>
       );
+
+      style.backgroundColor = 'red';
+      style[':hover'] = {
+        backgroundColor: 'salmon',
+        color: 'black'
+      }
     }
 
+    let classes = [];
+    if (this.state.persons.length <=2){
+      classes.push('red');
+    }
+    if (this.state.persons.length <=1) {
+      classes.push('bold');
+    }
+    
     const charList = this.state.textInput.split('').map((ch, index) => {
       return <Char 
         character={ch} 
@@ -94,14 +114,15 @@ class App extends Component {
         clicked={() => this.deleteCharHandler(index)}/>;
     });
 
-
     return (
+      <StyleRoot>
       <div className="App">
         <h1>Hi am a React app1</h1>
-        <p> This is oK </p>
+        <p className={classes.join(' ')}>This is OK</p>
         <button 
-        style={style}
-        onClick={this.togglePersonsHandler}>Toggle Persons</button>
+          style={style}
+          onClick={this.togglePersonsHandler}>Toggle Persons
+        </button>
         {persons}
         <br/>
         <br/>
@@ -110,12 +131,13 @@ class App extends Component {
         <Validation textInputLength={this.state.textInputLength} />
         {charList}
       </div>
+      </StyleRoot>
     );
     //return React.createElement('div', {className: 'App'}, React.createElement('h1', null, 'Does this work now?'));
   }
 }
 
-export default App;
+export default Radium(App);
 
 
 //        <input type="text" onChange={(event) => this.nameChangedHandler(event, )}/>
