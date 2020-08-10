@@ -1,9 +1,23 @@
 import React, {Component} from 'react';
+import styled from 'styled-components';
 import './App.css';
 import Person from './Person/Person';
 import Validation from './Validation/Validation';
 import Char from './Char/Char';
-import Radium, {StyleRoot} from 'radium';
+
+const StyleButton = styled.button`
+  background-color: ${props => props.alt ? 'red' : 'green'};
+  color: white;
+  font: inherit;
+  border: 1px solid blue;
+  padding: 8px;
+  cursor: pointer;
+
+  &:hover {
+    background-color: ${props => props.alt ? 'salmon' : 'lightgreen'};
+    color: black;
+  }
+`;
 
 class App extends Component {
   state = {
@@ -64,18 +78,6 @@ class App extends Component {
   }
 
   render () {
-    const style = {
-      backgroundColor: 'green',
-      color: 'white',
-      font: 'inherit',
-      border: '1px solid blue',
-      padding: '8px',
-      cursor: 'pointer',
-      ':hover': {
-        backgroundColor: 'lightgreen',
-        color: 'black'
-      }
-    };
 
     let persons = null;
     if (this.state.showPersons) {
@@ -92,11 +94,11 @@ class App extends Component {
         </div>
       );
 
-      style.backgroundColor = 'red';
-      style[':hover'] = {
-        backgroundColor: 'salmon',
-        color: 'black'
-      }
+      //style.backgroundColor = 'red';
+      //style[':hover'] = {
+      //  backgroundColor: 'salmon',
+      //  color: 'black'
+      //}
     }
 
     let classes = [];
@@ -115,14 +117,11 @@ class App extends Component {
     });
 
     return (
-      <StyleRoot>
       <div className="App">
         <h1>Hi am a React app1</h1>
         <p className={classes.join(' ')}>This is OK</p>
-        <button 
-          style={style}
-          onClick={this.togglePersonsHandler}>Toggle Persons
-        </button>
+        <StyleButton alt={this.state.showPersons} onClick={this.togglePersonsHandler}>   Toggle Persons
+        </StyleButton>
         {persons}
         <br/>
         <br/>
@@ -131,70 +130,9 @@ class App extends Component {
         <Validation textInputLength={this.state.textInputLength} />
         {charList}
       </div>
-      </StyleRoot>
     );
     //return React.createElement('div', {className: 'App'}, React.createElement('h1', null, 'Does this work now?'));
   }
 }
 
-export default Radium(App);
-
-
-//        <input type="text" onChange={(event) => this.nameChangedHandler(event, )}/>
-
-
-
-
-/*
-import React, { useState } from 'react';
-import './App.css';
-import Person from './Person/Person'
-
-const App = props => {
-  const [ personsState, setPersonsState ] = useState({
-    persons: [
-      { name: 'Max', age: 38 },
-      { name: 'Tom', age: 39 },
-      { name: 'Mark', age: 36 }
-    ]
-  });
-
-  const [otherState, setOtherState] = useState('my other state');
-
-  console.log(personsState, otherState);
-  //console.log(setPersonsState)
-
-  const switchNameHandler = () => {
-    setPersonsState({
-      persons: [
-        { name: 'Denis', age: 18},
-        { name: 'Tom', age: 19},
-        { name: 'Mark', age: 17}
-      ],
-      //otherState: personsState.otherState
-      otherState: 'new state'
-    }); 
-  }  
-
-  return (
-    <div className="App">
-      <h1>Hi am a React app1</h1>
-      <p> This is oK </p>
-      <button onClick={switchNameHandler}>Switch Name</button>
-      <Person 
-        name={personsState.persons[0].name} 
-        age={personsState.persons[0].age}> LALALA
-      </Person>
-      <Person 
-        name={personsState.persons[1].name} 
-        age={personsState.persons[1].age}>My Hobbies: Racing!
-        </Person>
-      <Person 
-        name={personsState.persons[2].name} 
-        age={personsState.persons[2].age} />
-    </div>
-  )
-}
-
 export default App;
-*/
