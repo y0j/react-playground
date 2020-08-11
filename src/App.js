@@ -20,7 +20,7 @@ class App extends Component {
     
   nameChangedHandler = (event, id) => {
     const personIndex = this.state.persons.findIndex(p => {
-      return p.id === id
+      return p.userid === id
     });
 
     const person = {
@@ -77,7 +77,10 @@ class App extends Component {
               click={() => this.deletePersonHandler(index)}
               name={person.name}
               age={person.age}
-              changed={(event) => this.nameChangedHandler(event, person.id)}/>
+              changed={(event) => { 
+                debugger 
+                return this.nameChangedHandler(event, person.id)}
+              }/>
             </ErrorBoundary>
           })}
         </div>
